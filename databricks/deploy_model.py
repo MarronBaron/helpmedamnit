@@ -1,5 +1,6 @@
 import mlflow
 import pandas as pd
+from mlflow.models.signature import infer_signature
 
 # Adjusting imports for the new location
 from src.agents.triage import TriageAgent
@@ -58,28 +59,40 @@ def deploy():
     Logs the AdvocateAgentWrapper to the MLflow Model Registry.
     This function is intended to be run from a Databricks environment.
     """
+    # Create the catalog and schema if they don't exist
+    print("Creating hackathon catalog...")
+    spark.sql("CREATE CATALOG IF NOT EXISTS hackathon_helpme")
+    spark.sql("CREATE SCHEMA IF NOT EXISTS hackathon_helpme.default")
+    print("✅ Catalog and schema ready!")
+    
     # This is the name your model will have in the Unity Catalog
-    # Format: <catalog>.<schema>.<model_name>
-    # Make sure the catalog and schema exist in your Databricks workspace.
-    model_name = "databricksday.default.helpmedamnit_agent"
+    model_name = "hackathon_helpme.default.helpmedamnit_agent"
     
     print(f"Starting deployment for model: {model_name}")
     
     # It's good practice to set the experiment to keep runs organized
-    mlflow.set_experiment(f"/Users/{dbutils.notebook.entry_point.getDbutils().notebook().getContext().userName().get()}/helpmedamnit")
+    user_name = dbutils.notebook.entry_point.getDbutils().notebook().getContext().userName().get()
+    mlflow.set_experiment(f"/Users/{user_name}/helpmedamnit_experiment")
 
     with mlflow.start_run() as run:
         print(f"MLflow run started (run_id={run.info.run_id})...")
         
+        # Create example input and output for signature inference
+        example_input = pd.DataFrame({"query": ["I need Medicare plans with dental and fitness benefits"]})
+        wrapper = AdvocateAgentWrapper()
+        wrapper.load_context(None)
+        example_output = wrapper.predict(None, example_input)
+        
+        # Infer the signature
+        signature = infer_signature(example_input, example_output)
+        
         # Log the model
-        # The `python_model` argument takes an instance of our wrapper.
-        # The `registered_model_name` tells MLflow where to register it.
         mlflow.pyfunc.log_model(
             artifact_path="agent_model",
             python_model=AdvocateAgentWrapper(),
             registered_model_name=model_name,
-            # We can also specify dependencies here
-            # pip_requirements=["langchain", "openai", "pandas"] 
+            signature=signature,
+            input_example=example_input
         )
         
         print("✅ Model logged successfully.")

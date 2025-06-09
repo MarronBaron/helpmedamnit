@@ -4,7 +4,7 @@ import mlflow
 
 # This is the name of the model as it will be registered in MLflow Model Registry
 # We will register it in the deploy_model.py script later.
-REGISTERED_MODEL_NAME = "databricksday.default.helpmedamnit_agent"
+REGISTERED_MODEL_NAME = "hackathon_helpme.default.helpmedamnit_agent"
 
 def get_latest_model_version(model_name):
     """

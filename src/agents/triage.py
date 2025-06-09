@@ -13,7 +13,9 @@ class TriageAgent:
 
         if "crisis" in query_lower or "emergency" in query_lower:
             return self.specialists["crisis_navigator"].run(query)
-        elif "benefit" in query_lower or "insurance" in query_lower or "denied" in query_lower:
+        elif ("benefit" in query_lower or "insurance" in query_lower or "denied" in query_lower or 
+              "plan" in query_lower or "medicare" in query_lower or "dental" in query_lower or 
+              "fitness" in query_lower or "transportation" in query_lower):
             return self.specialists["benefits_advocate"].run(query)
         elif "appeal" in query_lower or "fight" in query_lower:
             return self.specialists["appeal_fighter"].run(query)
