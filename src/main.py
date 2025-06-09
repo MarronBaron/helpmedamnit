@@ -8,11 +8,11 @@ from src.agents.appeal_fighter import AppealFighter
 
 def run_local_agent_test():
     """
-    Tests the core agent logic locally, without any MLflow dependencies.
+    Tests the core agent logic locally, without any data dependencies.
     """
     print("--- Running Local Agent Test ---")
     
-    # 1. Initialize agents directly
+    # Initialize agents directly
     crisis_navigator = CrisisNavigator()
     benefits_advocate = BenefitsAdvocate()
     appeal_fighter = AppealFighter()
@@ -24,15 +24,12 @@ def run_local_agent_test():
     }
     triage_agent = TriageAgent(specialists=specialists)
     
-    # 2. Create sample queries
     test_queries = [
         "I am in a crisis and need help now!",
         "My insurance denied my claim for a hospital stay.",
         "I want to appeal the decision from my provider.",
-        "I'm not sure what to do."
     ]
     
-    # 3. Get responses
     print("\n--- Test Results ---")
     for query in test_queries:
         response = triage_agent.route(query)

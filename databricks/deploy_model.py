@@ -18,6 +18,7 @@ class AdvocateAgentWrapper(mlflow.pyfunc.PythonModel):
         This method is called when the model is loaded on Databricks.
         """
         print("Loading agent context on Databricks...")
+
         # Initialize specialist agents
         self.crisis_navigator = CrisisNavigator()
         self.benefits_advocate = BenefitsAdvocate()
@@ -30,9 +31,6 @@ class AdvocateAgentWrapper(mlflow.pyfunc.PythonModel):
         }
         self.triage_agent = TriageAgent(specialists=specialists)
         print("✅ Agent context loaded successfully on Databricks.")
-        # from src.utils.data_loader import load_benefits_data
-        # self.benefits_data = load_benefits_data(catalog="databricksday")
-
 
     def predict(self, context, model_input):
         """
