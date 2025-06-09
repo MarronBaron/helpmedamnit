@@ -25,19 +25,22 @@ export default async function handler(req, res) {
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`Databricks API error: ${response.status} - ${errorText}`);
       throw new Error(`Databricks API responded with status: ${response.status}`);
     }
 
     const databricksData = await response.json();
     
-    // Extract the relevant part of the response to send back to the frontend
-    const agentResponse = databricksData.predictions[0].response;
+    // The new model returns a JSON string in the first prediction
+    // Extract and return the JSON string directly
+    const agentResponse = databricksData.predictions[0];
     
-    // Send the clean response back to our React app
+    // Send the response back to our React app
     res.status(200).json({ response: agentResponse });
 
   } catch (error) {
     console.error("Error in serverless function:", error);
-    res.status(500).json({ error: 'An error occurred while contacting the Databricks endpoint.' });
+    res.status(500).json({ error: `An error occurred while contacting the Databricks endpoint: ${error.message}` });
   }
 } 
