@@ -32,9 +32,9 @@ export default async function handler(req, res) {
 
     const databricksData = await response.json();
     
-    // The model returns a JSON string in predictions[0]
-    // We need to return it as the 'response' field for the frontend
-    const agentJsonString = databricksData.predictions[0];
+    // MLflow returns the data in a DataFrame format with predictions[0]["0"]
+    // The JSON string is in the "0" key of the first prediction
+    const agentJsonString = databricksData.predictions[0]["0"];
     
     // Send the JSON string as the response field
     res.status(200).json({ response: agentJsonString });
