@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 // This is the Vercel serverless function that will act as our secure proxy
 export default async function handler(req, res) {
   // Ensure we're only handling POST requests
@@ -17,19 +15,23 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Databricks API token is not configured on the server.' });
     }
 
-    const databricksResponse = await axios.post(
-      databricksEndpoint,
-      { inputs: { query: [query] } },
-      {
-        headers: {
-          'Authorization': `Bearer ${databricksToken}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const response = await fetch(databricksEndpoint, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${databricksToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ inputs: { query: [query] } })
+    });
 
+    if (!response.ok) {
+      throw new Error(`Databricks API responded with status: ${response.status}`);
+    }
+
+    const databricksData = await response.json();
+    
     // Extract the relevant part of the response to send back to the frontend
-    const agentResponse = databricksResponse.data.predictions[0].response;
+    const agentResponse = databricksData.predictions[0].response;
     
     // Send the clean response back to our React app
     res.status(200).json({ response: agentResponse });
