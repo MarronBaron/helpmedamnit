@@ -3,6 +3,13 @@ import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import './App.css';
 
+// Custom SOS Icon Component
+const SOSIcon = () => (
+  <div className="sos-icon">
+    <div className="sos-text">SOS</div>
+  </div>
+);
+
 function App() {
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -61,7 +68,10 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>🆘 HelpMeDammit</h1>
+        <div className="title-container">
+          <SOSIcon />
+          <h1>HelpMeDammit</h1>
+        </div>
         <p>Your AI advocate for navigating healthcare bureaucracy.</p>
         <button 
           className="profile-toggle"

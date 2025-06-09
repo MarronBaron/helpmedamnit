@@ -41,6 +41,62 @@ body {
   position: relative;
 }
 
+.title-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.sos-icon {
+  background: linear-gradient(135deg, #ff4757, #ff3838);
+  width: 60px;
+  height: 60px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 32px rgba(255, 71, 87, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  position: relative;
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.sos-icon::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(135deg, #ff4757, #ff3838, #ff4757);
+  border-radius: 17px;
+  z-index: -1;
+  opacity: 0.7;
+  filter: blur(8px);
+}
+
+.sos-text {
+  color: white;
+  font-weight: 900;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 8px 32px rgba(255, 71, 87, 0.4);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 12px 40px rgba(255, 71, 87, 0.6);
+    transform: scale(1.05);
+  }
+}
+
 .App-header h1 {
   font-size: 3.5rem;
   font-weight: 800;
@@ -48,7 +104,7 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 10px;
+  margin: 0;
   text-shadow: 0 0 30px var(--shadow-purple);
 }
 
@@ -365,6 +421,20 @@ button[type="submit"]:disabled {
 @media (max-width: 768px) {
   .App {
     padding: 15px;
+  }
+  
+  .title-container {
+    gap: 12px;
+  }
+  
+  .sos-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+  }
+  
+  .sos-text {
+    font-size: 0.9rem;
   }
   
   .App-header h1 {
