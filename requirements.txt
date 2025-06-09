@@ -1,0 +1,7 @@
+langchain
+openai
+mlflow
+databricks-sdk
+streamlit
+pandas
+python-dotenv
