@@ -38,7 +38,20 @@ function App() {
 
     try {
       const apiResponse = await axios.post('/api/invoke', { query });
-      const data = JSON.parse(apiResponse.data.response);
+      
+      // Debug: Log what we're actually receiving
+      console.log('API Response:', apiResponse.data);
+      console.log('Response type:', typeof apiResponse.data.response);
+      console.log('Response value:', apiResponse.data.response);
+      
+      // Try to parse the response - handle both string and object cases
+      let data;
+      if (typeof apiResponse.data.response === 'string') {
+        data = JSON.parse(apiResponse.data.response);
+      } else {
+        // Already an object
+        data = apiResponse.data.response;
+      }
       
       // Animate through the steps
       setAgentSteps(data.steps || []);
@@ -53,8 +66,8 @@ function App() {
       }
 
     } catch (err) {
+      console.error('Full error:', err);
       setError('Failed to get a response from the agent.');
-      console.error(err);
     } finally {
       setIsLoading(false);
     }

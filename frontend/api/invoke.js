@@ -32,12 +32,12 @@ export default async function handler(req, res) {
 
     const databricksData = await response.json();
     
-    // The new model returns a JSON string in the first prediction
-    // Extract and return the JSON string directly
-    const agentResponse = databricksData.predictions[0];
+    // The model returns a JSON string in predictions[0]
+    // We need to return it as the 'response' field for the frontend
+    const agentJsonString = databricksData.predictions[0];
     
-    // Send the response back to our React app
-    res.status(200).json({ response: agentResponse });
+    // Send the JSON string as the response field
+    res.status(200).json({ response: agentJsonString });
 
   } catch (error) {
     console.error("Error in serverless function:", error);
