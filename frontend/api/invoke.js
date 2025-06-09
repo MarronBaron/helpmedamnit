@@ -1,4 +1,4 @@
-const axios = require('axios');
+import axios from 'axios';
 
 // This is the Vercel serverless function that will act as our secure proxy
 export default async function handler(req, res) {
