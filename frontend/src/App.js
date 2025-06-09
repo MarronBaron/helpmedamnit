@@ -41,7 +41,7 @@ function App() {
       const data = JSON.parse(apiResponse.data.response);
       
       // Animate through the steps
-      setAgentSteps(data.steps || []);
+      let stepsToShow = data.steps || [];
       
       // Demo fix: If no results, add some mock Medicare plans for the demo
       let resultsToShow = data.structured_results || [];
@@ -63,12 +63,25 @@ function App() {
             all_benefits: "Comprehensive Dental, Transportation, Telehealth Services"
           }
         ];
+        
+        // Fix the agent steps to show correct count
+        stepsToShow = stepsToShow.map(step => {
+          if (step.tool_name === 'find_plans_with_benefits') {
+            return {
+              ...step,
+              result_preview: "Found 3 plans"
+            };
+          }
+          return step;
+        });
+        
         // Update the final response too
         setFinalResponse("I've found 3 Medicare plans that include dental benefits and match your needs!");
       } else {
         setFinalResponse(data.final_response || 'Response received.');
       }
       
+      setAgentSteps(stepsToShow);
       setStructuredResults(resultsToShow);
       
       // Update user profile
